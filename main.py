@@ -1,6 +1,9 @@
 import discord
 from discord.ext import commands
 import os
+import threading
+import http.server
+import socketserver
 
 bot = commands.Bot(command_prefix="!")
 
@@ -12,4 +15,13 @@ async def on_ready():
 async def ping(ctx):
     await ctx.send("Pong!")
 
+def keep_alive():
+    PORT = 8080
+    handler = http.server.SimpleHTTPRequestHandler
+    httpd = socketserver.TCPServer(("", PORT), handler)
+    thread = threading.Thread(target=httpd.serve_forever)
+    thread.daemon = True
+    thread.start()
+
+keep_alive()
 bot.run(os.getenv("DISCORD_TOKEN"))
