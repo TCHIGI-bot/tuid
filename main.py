@@ -5,7 +5,11 @@ import threading
 import http.server
 import socketserver
 
-bot = commands.Bot(command_prefix="!")
+# تفعيل النوايا المطلوبة للبوت
+intents = discord.Intents.default()
+intents.message_content = True
+
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 @bot.event
 async def on_ready():
@@ -15,6 +19,7 @@ async def on_ready():
 async def ping(ctx):
     await ctx.send("Pong!")
 
+# خادم ويب صغير باش يخلّي Koyeb يشوف البوت شغال (على بورت 8080)
 def keep_alive():
     PORT = 8080
     handler = http.server.SimpleHTTPRequestHandler
